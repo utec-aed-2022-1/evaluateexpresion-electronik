@@ -3,6 +3,7 @@
 #include <stack>
 #include <vector>
 #include <map>
+#include "stack.h"
 
 using namespace std;
 
@@ -15,6 +16,118 @@ struct Result{
         this->error = error;
     }
 };
+
+int precedencia(char operador){
+    int aux;
+    if(operador == '/')
+        aux=3;
+    else if(operador == '*')
+        aux=3;
+    else if(operador == '+')
+        aux=2;
+    else if(operador == '-')
+        aux=2;
+    else if(operador == '(')
+        aux=1;
+    return aux;
+};
+
+double resolver(string input){
+    Stack<double>* Numeros = new Stack<double>();
+    int length = input.length();
+    double op2, op1;
+
+    for(int i = 0; i < length; ++i){
+
+        if( !isdigit(input[i]) ){
+            op2 = Numeros->pop();
+            op1 = Numeros->pop();
+
+            if(input[i] == '+'){
+                Numeros->push(op1 + op2);
+            }
+            else if(input[i] == '-'){
+                Numeros->push(op1 - op2);
+            }
+            else if(input[i] == '*'){
+                Numeros->push(op1 * op2);
+            }
+            else if(input[i] == '/'){
+                Numeros->push(op1 / op2);
+            }
+            
+        }
+        else
+            Numeros -> push(double(input[i]));
+    }
+    return Numeros->pop();
+}
+
+string ordenar(string input){
+    int length = input.length();
+
+    //Stack<char>* Postfijo = new Stack<char>();
+    Stack<char>* Caracteres = new Stack<char>();
+    string postfijo;
+    bool operacion = 0;
+    bool parentesis = 0;
+
+    char caracter;
+    for(int i = 0; i < length; ++i)
+    {
+        caracter = input[i];
+        if (isdigit(caracter)){
+            postfijo += caracter;
+        }
+
+        else if (caracter != 32) {
+
+            if (caracter != ')'){
+                if (caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/'){
+                    if (operacion == 1){
+                        if(precedencia(Caracteres->front() >= precedencia(caracter))){
+                            postfijo += Caracteres->pop();
+                            postfijo += input[i+2];
+                            postfijo += caracter;
+                        }
+                        else{
+                            postfijo += input[i+2];
+                            postfijo += caracter;
+                            postfijo += Caracteres->pop();
+                        }
+                        i += +3;
+                        operacion = 0;
+                    }
+                    else{
+                        operacion = 1;
+                        Caracteres -> push(caracter);
+                    }
+
+                }
+                else{
+                    Caracteres -> push(caracter);
+                }
+                
+            }
+            else{
+                // Sacar todo lo que está en Stack
+                // hasta encontrar el primer '('
+
+                char carc;
+                carc = Caracteres -> pop();
+                while(Caracteres->size() != 0 || carc != '('){
+                    postfijo += carc;
+                    carc = Caracteres -> pop();
+                }
+                parentesis = 0;
+                operacion = 0;
+
+            }
+        }
+    }
+
+    return postfijo;
+}
 
 
 Result evaluate(string input)
