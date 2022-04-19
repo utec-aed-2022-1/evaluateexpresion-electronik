@@ -23,6 +23,18 @@ class Stack {
             }
         }
 
+        T back(){ // *            
+            if(!this->is_empty()){
+                Node<T>* temp = this->head;
+                for(int i = 0; i < this->nodes - 1; i++){
+                    temp = temp->next;
+                }
+                return temp->data;
+            } else{
+                throw ("Lista vacía");
+            } 
+        }
+
         T pop(){
             if (!this->is_empty()){
                 T data = head->data;

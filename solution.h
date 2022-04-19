@@ -27,8 +27,8 @@ int precedencia(char operador){
         aux=2;
     else if(operador == '-')
         aux=2;
-    else if(operador == '(')
-        aux=1;
+    //else if(operador == '(')
+        //aux=1;
     return aux;
 };
 
@@ -55,10 +55,21 @@ double resolver(string input){
             else if(input[i] == '/'){
                 Numeros->push(op1 / op2);
             }
+            cout << "op1: " << op1 << endl;
+            cout << "op2: " << op2 << endl;
             
         }
-        else
-            Numeros -> push(double(input[i]));
+        else{
+            double aux=double(input[i])-48;
+            if (int(input[i+1])>=48){
+                aux = aux*10;
+                aux += double(input[i+1])-48;
+                i++;
+            }
+            Numeros -> push(aux);
+        }
+            
+            cout << "Push: " << double(input[i]) << endl;
     }
     return Numeros->pop();
 }
@@ -76,59 +87,105 @@ string ordenar(string input){
     for(int i = 0; i < length; ++i)
     {
         caracter = input[i];
-        if (isdigit(caracter)){
-            postfijo += caracter;
-        }
+        if (caracter != 32){
 
-        else if (caracter != 32) {
+            if (isdigit(caracter))
+                postfijo += caracter;
+            
 
-            if (caracter != ')'){
-                if (caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/'){
-                    if (operacion == 1){
-                        if(precedencia(Caracteres->front() >= precedencia(caracter))){
+            else {
+
+                if (caracter != ')'){
+                    if (caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/'){
+                        if (operacion == 1 && parentesis == 0){
+                            if(precedencia(Caracteres->front()) >= precedencia(caracter)){
                             postfijo += Caracteres->pop();
                             postfijo += input[i+2];
                             postfijo += caracter;
+                            }
+                            //else if
+                            else{
+                                postfijo += input[i+2];
+                                postfijo += caracter;
+                                postfijo += Caracteres->pop();
+                            }
+                            i += +2;
+                            operacion = 0;
+
+                            
                         }
                         else{
-                            postfijo += input[i+2];
-                            postfijo += caracter;
-                            postfijo += Caracteres->pop();
+                            operacion = 1;
+                            Caracteres -> push(caracter);
                         }
-                        i += +3;
-                        operacion = 0;
+
                     }
                     else{
-                        operacion = 1;
+                        parentesis = 1;
                         Caracteres -> push(caracter);
                     }
-
+                    
                 }
                 else{
-                    Caracteres -> push(caracter);
-                }
-                
-            }
-            else{
-                // Sacar todo lo que está en Stack
-                // hasta encontrar el primer '('
+                    // Sacar todo lo que está en Stack
+                    // hasta encontrar el primer '('
 
-                char carc;
-                carc = Caracteres -> pop();
-                while(Caracteres->size() != 0 || carc != '('){
-                    postfijo += carc;
-                    carc = Caracteres -> pop();
-                }
-                parentesis = 0;
-                operacion = 0;
+                    char carc;
+                    bool detener=0;
+                    while(Caracteres->size() != 0 && detener == 0){
+                        carc = Caracteres -> pop();
+                        if (carc == '+' || carc == '-' || carc == '*' || carc == '/')
+                            postfijo += carc;
+                        else if(carc == '(')
+                            detener = 1;
+                    }
+                    parentesis = 0;
+                    operacion = 0;
 
+                }
             }
         }
     }
-
+    while (Caracteres->size()!=0){
+        postfijo+=Caracteres->pop();}
     return postfijo;
 }
 
+string conversion(string expresion){
+    Stack<char>* converter = new Stack<char>();
+    converter->push(' ');
+    string posfija;
+
+    for (int i=0; i<expresion.length();i++){
+        char token = expresion[i];
+        if (token == '0' || token == '1' || token == '2' || token == '3' || token == '4' || token == '5' || token == '6' || token == '7' || token == '8' || token == '9' || token == ' '){
+            posfija += token;
+            if (int(expresion[i+1])>=48){
+                posfija += expresion[i+1];
+                i++;
+            }
+        }
+        else if (token == '('){
+            converter->push(token);
+        }
+            
+        else if (token == ')'){
+            char topToken = converter->pop();
+            while (topToken != '('){
+                posfija += topToken;
+                topToken = converter->pop();
+            }
+        }
+        else{
+            while (converter->size()!=0 && precedencia(converter->back()) >= precedencia(token))
+                  posfija+=converter->pop();
+            converter->push(token);
+        }
+    }
+    while (converter->size()!=0){
+        posfija+=converter->pop();}
+    return posfija;
+}
 
 Result evaluate(string input)
 {
