@@ -23,6 +23,7 @@ bool isOperator(char input){
     bool isMin = input == '-';
     bool isMul = input == '*';
     bool isDiv = input == '/';
+    // Devuelve cualquier retorno '1'
     return isPlus || isMin || isMul || isDiv;
 }
 
