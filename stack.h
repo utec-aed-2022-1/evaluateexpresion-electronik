@@ -19,6 +19,12 @@ class Stack {
 };
 
 template <class T>
+Stack<T>::~Stack()
+{
+    delete[] this->array;
+}
+
+template <class T>
 Stack<T>::Stack(int _capacity)
 {
     this->array = new T[_capacity];
@@ -26,11 +32,6 @@ Stack<T>::Stack(int _capacity)
     this->front = -1;
 }
 
-template <class T>
-Stack<T>::~Stack()
-{
-    delete[] this->array;
-}
 
 template <class T>
 void Stack<T>::push(T data){
@@ -55,11 +56,12 @@ T Stack<T>::pop(){
 }
 
 template <class T>
+T Stack<T>::top(){
+    return this->array[this->front];
+}
+
+template <class T>
 bool Stack<T>::empty(){
     return (this->front == -1);
 }
 
-template <class T>
-T Stack<T>::top(){
-    return this->array[this->front];
-}

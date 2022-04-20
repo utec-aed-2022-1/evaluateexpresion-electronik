@@ -24,6 +24,7 @@ bool isOperator(char input){
     bool isMin = input == '-';
     bool isMul = input == '*';
     bool isDiv = input == '/';
+    // Devuelve cualquier retorno '1'
     return isPlus || isMin || isMul || isDiv;
 }
 
@@ -186,3 +187,82 @@ Result evaluate(string input)
     }
     return Result(result, error);
 }
+
+// string ordenar(string input){
+//     int length = input.length();
+
+//     //Stack<char>* Postfijo = new Stack<char>();
+//     Stack<char>* Caracteres = new Stack<char>();
+//     string postfijo;
+//     bool operacion = 0;
+//     bool parentesis = 0;
+
+//     char caracter;
+//     for(int i = 0; i < length; ++i)
+//     {
+//         caracter = input[i];
+//         if (caracter != 32){
+
+//             if (isdigit(caracter))
+//                 postfijo += caracter;
+            
+
+//             else {
+
+//                 if (caracter != ')'){
+//                     if (caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/'){
+//                         if (operacion == 1 && parentesis == 0){
+//                             if(precedencia(Caracteres->front()) >= precedencia(caracter)){
+//                             postfijo += Caracteres->pop();
+//                             postfijo += input[i+2];
+//                             postfijo += caracter;
+//                             }
+//                             //else if
+//                             else{
+//                                 postfijo += input[i+2];
+//                                 postfijo += caracter;
+//                                 postfijo += Caracteres->pop();
+//                             }
+//                             i += +2;
+//                             operacion = 0;
+
+                            
+//                         }
+//                         else{
+//                             operacion = 1;
+//                             Caracteres -> push(caracter);
+//                         }
+
+//                     }
+//                     else{
+//                         parentesis = 1;
+//                         Caracteres -> push(caracter);
+//                     }
+                    
+//                 }
+//                 else{
+//                     // Sacar todo lo que está en Stack
+//                     // hasta encontrar el primer '('
+
+//                     char carc;
+//                     bool detener=0;
+//                     while(Caracteres->size() != 0 && detener == 0){
+//                         carc = Caracteres -> pop();
+//                         if (carc == '+' || carc == '-' || carc == '*' || carc == '/')
+//                             postfijo += carc;
+//                         else if(carc == '(')
+//                             detener = 1;
+//                     }
+//                     parentesis = 0;
+//                     operacion = 0;
+
+//                 }
+//             }
+//         }
+//     }
+//     while (Caracteres->size()!=0){
+//         postfijo+=Caracteres->pop();}
+//     return postfijo;
+// }
+
+
