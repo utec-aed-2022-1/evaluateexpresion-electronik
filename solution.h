@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include "stack.h"
-// #include "forward.h"
+#include "forward.h"
 // #include <stack>
-#include <vector>
+// #include <vector>
 
 using namespace std;
 
@@ -107,7 +107,7 @@ Result evaluate(string input)
         // 2- convertir de Infijo a Postfijo
         // Create an empty stack called opstack for keeping operators. Create an empty list for output.
         Stack<char> opstack(20);
-        vector<char> output; // postfix
+        ForwardList<char> output; // postfix
 
         // Scan the token list from left to right.
         for(string::iterator it = infix.begin(); it != infix.end(); ++it){

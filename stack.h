@@ -50,7 +50,7 @@ T Stack<T>::pop(){
         this->front--;
         return poppedValue;
     } else{
-        return this->array[0]; // Esto debería dar error.
+        throw ("Empty stack."); // Esto debería dar error.
     }
 }
 
