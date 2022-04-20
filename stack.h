@@ -12,8 +12,8 @@ class Stack {
         Stack(int _capacity);
         ~Stack();
         void push(T data);
-        T pop();
         bool empty();
+        T pop();
         T top();
         
 };

@@ -2,6 +2,7 @@
 #include <string>
 #include "stack.h"
 #include "forward.h"
+#include <math.h>
 // #include <stack>
 // #include <vector>
 
@@ -95,18 +96,22 @@ Result evaluate(string input)
                 rightPar++;
             }
             infix.push_back(*it);
+            if(isdigit(infix[infix.length()-2]) && !isOperator(*it) && *it != '(' && *it != ')'){
+                infix.push_back('.');
+
+            }
         }
     }
 
     error = !(leftPar == rightPar) || error;
-    error = !(isdigit(infix.back()) || infix.back() == ')') || error;
+    error = !(isdigit(infix.back()) || infix.back() == ')' || infix.back() == '.') || error;
 
     //* Si no cumple la validacion retornar Result.error = true;
 
     if(!error){
         // 2- convertir de Infijo a Postfijo
         // Create an empty stack called opstack for keeping operators. Create an empty list for output.
-        Stack<char> opstack(20);
+        Stack<char> opstack(50);
         ForwardList<char> output; // postfix
 
         // Scan the token list from left to right.
@@ -135,6 +140,8 @@ Result evaluate(string input)
                 }
                 // Push it on the opstack
                 opstack.push(*it);
+            } else if(*it == '.'){
+                output.push_back(*it);
             }
         }
         // Any operators still on the stack can be removed and appended to the end of the output list
@@ -145,13 +152,24 @@ Result evaluate(string input)
 
         // 3- resolver la expresion
             // Create an empty stack called operandStack.
-        Stack<double> operandstack(20);
+        Stack<double> operandstack(50);
 
             // Scan the token list from left to right.
             for(int i = 0; i < output.size(); i++){
             // If the token is an operand, convert it from a string to an integer and push the value onto the operandStack.
-                if(isdigit(output[i])){
-                    double temp = (double)output[i]-48; // todo lo que esta después del () es double
+                if(isdigit(output[i]) || output[i] == '.'){
+                    double temp = 0;
+                    if(output[i] == '.'){
+                        int count = i-1;
+                        double mult = 0;
+                        while(!isOperator(output[count])){
+                            temp += operandstack.pop()*pow(10,mult);
+                            mult++;
+                            count--;
+                        }
+                    } else{
+                        temp = (double)output[i]-48; // todo lo que esta después del () es double
+                    }
                     operandstack.push(temp);
                 } else if(isOperator(output[i])){ // If the token is an operator, *, /, +, or -.
                     // Pop the operandStack twice.

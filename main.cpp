@@ -17,8 +17,8 @@ int main()
     expr = "(6 + 8) / (5 + 2)";
     ASSERT(evaluate(expr).result == 2, "The function evaluate is not working");
 
-    // expr = "(6 + 8) / (5 + 2) * 12";
-    // ASSERT(evaluate(expr).result == 24, "The function evaluate is not working");
+    expr = "(6 + 8) / (5 + 2) * 12";
+    ASSERT(evaluate(expr).result == 24, "The function evaluate is not working");
 
     expr = "(6 + 8 / (5 + 2) * 3";
     ASSERT(evaluate(expr).error == true, "The function evaluate is not working");
